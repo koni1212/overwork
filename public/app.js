@@ -59,7 +59,7 @@ var login = function() {
 
 				firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 				.then(function() {
-					return firebase.auth().signInWithPopup(provider);
+					return firebase.auth().signInWithRedirect(provider);
 				})
 				.catch(function(error) {
 					// Handle Errors here.
