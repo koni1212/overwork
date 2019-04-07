@@ -1,0 +1,10 @@
+/* 入力項目テーブル */
+#inputTable tr.holiday {
+	background: #fc1150;
+}
+#inputTable tr.sunday {
+	background: #fc1150;
+}
+#inputTable tr.saturday {
+	background: #26a8ff;
+}
