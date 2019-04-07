@@ -121,16 +121,19 @@ var createTable = function() {
 			honshaEnd = honshaEnd == null ? "" : honshaEnd;
 
 			$("#inputTable").append(
-				"<tr class='" + holidayClass + "' data-date='" + formatDate(date, "YYYYMM/DD") + "'>" +
-				"<td>" + formatDate(date, "YYYY/MM/DD") + "(" + dayOfWeekStr + ")</td>" +
-				"<td><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4'></td>" +
-				"<td><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4'></td>" +
-				"<td><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4'></td>" +
-				"<td><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4'></td>" +
-				"</tr>");
+					"<tr class='" + holidayClass + "'>" +
+					"<td>" + formatDate(date, "YYYY/MM/DD") + "(" + dayOfWeekStr + ")</td>" +
+					"<td><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"<td><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"<td><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"<td><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"</tr>");
 
-			$("#inputTable input[type='tel']").on("blur", function() {
-				firebase.database().ref(AuthUI.uid + "/" + $(this).parents("tr").data("date") + "/" + $(this).attr("name")).set($(this).val());
+			$("#inputTable input[type='tel']").filter(function(index) {
+				return $(this).data("date") == formatDate(date, "YYYYMM/DD");
+			})
+			.on("blur", function() {
+				firebase.database().ref(AuthUI.uid + "/" + $(this).data("date") + "/" + $(this).attr("name")).set($(this).val());
 			});
 		});
 	}
