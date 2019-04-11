@@ -1,3 +1,12 @@
+#container{
+	display:none;
+}
+#loading{
+	position:absolute;
+	left:50%;
+	top:20%;
+	margin-left:-30px;
+}
 /* 入力項目テーブル */
 #inputTable tr.holiday {
 	background: #fc1150;

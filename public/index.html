@@ -6,8 +6,30 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>残業報告</title>
-
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="style.css?20190411">
+</head>
+	<body>
+		<div id="loading">
+			<img src="img/load.gif?20190411">
+		</div>
+		<div id="container">
+			お名前：
+			<input type="text" id="name">
+			<table id="inputTable">
+				<tr>
+					<th rowspan="2">日付</th>
+					<th colspan="2">現場</th>
+					<th colspan="2">本社</th>
+				</tr>
+				<tr>
+					<th>開始</th>
+					<th>終了</th>
+					<th>開始</th>
+					<th>終了</th>
+				</tr>
+			</table>
+		</div>
+	</body>
 
 	<!-- update the version number as needed -->
 	<script defer src="/__/firebase/5.9.3/firebase-app.js"></script>
@@ -20,25 +42,7 @@
 	<script defer src="/__/firebase/init.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
-	<script src="app.js"></script>
+	<script src="app.js?20190411"></script>
 
-</head>
-	<body>
-		お名前：
-		<input type="text" id="name">
-		<table id="inputTable">
-			<tr>
-				<td rowspan="2">日付</td>
-				<td colspan="2" align="center">現場</td>
-				<td colspan="2" align="center">本社</td>
-			</tr>
-			<tr>
-				<td>開始</td>
-				<td>終了</td>
-				<td>開始</td>
-				<td>終了</td>
-			</tr>
-		</table>
-	</body>
 </html>
 
