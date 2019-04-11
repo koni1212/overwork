@@ -50,7 +50,14 @@ var login = function() {
 				$("#name").on("blur", function() {
 					firebase.database().ref(AuthUI.uid + "/" + "fullName").set($(this).val());
 				});
+
+				// 入力表の作成
 				createTable();
+
+				// ロード表示を終え表を表示する
+				$("#loading").fadeOut();
+				$("#container").fadeIn();
+
 				resolve();
 			} else {
 				console.log("ログイン処理開始");
