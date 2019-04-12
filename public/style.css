@@ -17,3 +17,9 @@
 #inputTable tr.saturday {
 	background: #26a8ff;
 }
+#inputTable th.client,td.client {
+	background-color: #c6ffdb;
+}
+#inputTable th.home,td.home {
+	background-color: #ffd0ad;
+}
