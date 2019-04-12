@@ -8,11 +8,15 @@ var AuthUI = {
 	email: ""
 };
 
+// 最初の状態の入力表
+var origTable = $("#inputTable").html();
+
 $(function(){
 	Promise.resolve()
 	.then((result) => firebaseInit())
 	.then((result) => downloadCsv())
 	.then((result) => login())
+	.then((result) => check())
 	.catch(function(error) {});
 });
 
@@ -38,31 +42,9 @@ var login = function() {
 				AuthUI.uid = user.uid;
 				AuthUI.userName = user.displayName;
 				AuthUI.email = user.email;
-				firebase.database().ref(AuthUI.uid + "/" + "userName").set(AuthUI.userName);
-				firebase.database().ref(AuthUI.uid + "/" + "email").set(AuthUI.email);
 
-				// お名前をFirebaseと接続する
-				firebase.database().ref(AuthUI.uid + "/" + "fullName").once("value")
-				.then(function(snapshot) {
-					let name = snapshot.val();
-					$("#name").val(name);
-				});
-				$("#name").on("blur", function() {
-					firebase.database().ref(AuthUI.uid + "/" + "fullName").set($(this).val());
-				});
-
-				// 常駐先をFirebaseと接続する
-				firebase.database().ref(AuthUI.uid + "/" + "client").once("value")
-				.then(function(snapshot) {
-					let client = snapshot.val();
-					$("#client").val(client);
-				});
-				$("#client").on("change", function() {
-					firebase.database().ref(AuthUI.uid + "/" + "client").set($(this).val());
-				});
-
-				// 入力表の作成
-				createTable();
+				// 同じチームの名前の一覧を取得する
+				dispTeam();
 
 				// ロード表示を終え表を表示する
 				$("#loading").fadeOut();
@@ -83,7 +65,6 @@ var login = function() {
 					var errorCode = error.code;
 					var errorMessage = error.message;
 				});
-				resolve();
 			}
 		});
 	});
@@ -106,11 +87,13 @@ var downloadCsv = function() {
 };
 
 // 15日分の入力枠を作成する
-var createTable = function() {
+var createTable = function(uid) {
 	console.log("15日テーブル作成開始");
 	let systemDate = new Date();
 	let year = systemDate.getFullYear();
 	let month = systemDate.getMonth()+1;
+
+	$("#inputTable").html(origTable);
 
 	for (let i=0; i<15; i++) {
 		let date = new Date(year, month-1, i+1);
@@ -126,7 +109,7 @@ var createTable = function() {
 			holidayClass = "saturday";
 		}
 
-		firebase.database().ref(AuthUI.uid + "/" + formatDate(date, "YYYYMM/DD")).once("value")
+		firebase.database().ref(uid + "/" + formatDate(date, "YYYYMM/DD")).once("value")
 		.then(function(snapshot) {
 			let workStart = snapshot.child("workStart").val();
 			let workEnd = snapshot.child("workEnd").val();
@@ -140,18 +123,11 @@ var createTable = function() {
 			$("#inputTable").append(
 					"<tr class='" + holidayClass + "'>" +
 					"<td>" + formatDate(date, "YYYY/MM/DD") + "(" + dayOfWeekStr + ")</td>" +
-					"<td class='client'><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='client'><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='home'><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"<td class='client'>" + workStart + "</td>" +
+					"<td class='client'>" + workEnd + "</td>" +
+					"<td class='home'>" + honshaStart + "</td>" +
+					"<td class='home'>" + honshaEnd + "</td>" +
 					"</tr>");
-
-			$("#inputTable input[type='tel']").filter(function(index) {
-				return $(this).data("date") == formatDate(date, "YYYYMM/DD");
-			})
-			.on("blur", function() {
-				firebase.database().ref(AuthUI.uid + "/" + $(this).data("date") + "/" + $(this).attr("name")).set($(this).val());
-			});
 		});
 	}
 };
@@ -192,4 +168,39 @@ var isHoliday = function(date) {
 		}
 	};
 	return isHoliday;
+};
+
+// 同じチームメンバの名前を表示する
+var dispTeam = function() {
+	console.log("チームメンバ取得開始");
+
+	let myClient;
+	// 自分の常駐先を取得
+	firebase.database().ref(AuthUI.uid + "/" + "client").once("value")
+	.then(function(snapshot) {
+		myClient = snapshot.val();
+	});
+
+	firebase.database().ref().once("value")
+	.then(function(snapshot) {
+		snapshot.forEach(function(childSnapshot) {
+			let client = childSnapshot.child("client").val();
+			if (myClient == client) {
+				$("#checkName").append($("<option>").val(childSnapshot.key).text(childSnapshot.child("fullName").val()));
+			}
+		});
+		console.log("チームメンバ取得終了");
+	});
+};
+
+// チームメンバを確認する
+var check = function() {
+	return new Promise((resolve, reject) => {
+		$("#checkName").change(function() {
+			console.log("チームメンバが変わった");
+			// 入力表の作成
+			createTable($(this).val());
+		});
+		resolve();
+	});
 };
