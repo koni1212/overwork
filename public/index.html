@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>残業報告</title>
-	<link rel="stylesheet" type="text/css" href="style.css?20190411">
+	<link rel="stylesheet" type="text/css" href="style.css?20190412">
 	<link rel="shortcut icon" href="img/favicon.ico">
 	<link rel="apple-touch-icon" href="img/short-icon.png?20190412" sizes="152x152">
 </head>
@@ -20,14 +20,14 @@
 			<table id="inputTable">
 				<tr>
 					<th rowspan="2">日付</th>
-					<th colspan="2">現場</th>
-					<th colspan="2">本社</th>
+					<th colspan="2" class="client">現場</th>
+					<th colspan="2" class="home">本社</th>
 				</tr>
 				<tr>
-					<th>開始</th>
-					<th>終了</th>
-					<th>開始</th>
-					<th>終了</th>
+					<th class="client">開始</th>
+					<th class="client">終了</th>
+					<th class="home">開始</th>
+					<th class="home">終了</th>
 				</tr>
 			</table>
 		</div>
@@ -44,7 +44,7 @@
 	<script defer src="/__/firebase/init.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
-	<script src="app.js?20190411"></script>
+	<script src="app.js?20190412"></script>
 
 </html>
 
