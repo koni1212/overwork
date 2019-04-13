@@ -25,7 +25,7 @@
 }
 /* メニュー */
 #menu {
-	background-color: #9b9ca3;
+	background-color: #f2b8b8;
 	width: 100%;
 	position: fixed;
 	left: 0px;
@@ -40,16 +40,14 @@
 	list-style: none;
 	min-width: 50px;
 	text-align: center;
-	color: #ffffff;
 	float: left;
 	width: 33%;
 }
 #menu li.disabled {
-	background-color: #ffffff;
+	background-color: #9b9ca3;
 }
 #menu li a {
 	text-decoration: none;
-	color: #ffffff;
 	color: #333333;
 }
 #menu li.disabled a {

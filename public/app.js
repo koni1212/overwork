@@ -8,6 +8,9 @@ var AuthUI = {
 	email: ""
 };
 
+// SlackのWebhookURL
+var slackWebhookURL;
+
 $(function(){
 	Promise.resolve()
 	.then((result) => appInit())
@@ -21,6 +24,49 @@ $(function(){
 var appInit = function() {
 	return new Promise((resolve, reject) => {
 		console.log("アプリの初期処理開始");
+
+		// SlackのWebhookURLを取得
+		firebase.database().ref("init/slack").once("value")
+		.then(function(snapshot) {
+			slackWebhookURL = decodeURIComponent(snapshot.val());
+		});
+
+		$("#apply").click(function() {
+			let fullName = $("#name").val();
+			if (fullName == null || fullName.length == 0) {
+				alert("この機能はお名前を入力すると利用できます");
+			} else {
+				let message = window.prompt("新しい常駐先を登録できます\nあなたの所属と常駐先を教えてください");
+				if (message == null || message.length == 0) {
+					alert("キャンセルしました");
+				} else {
+					// 内容送信
+					var JSONData = {
+							"text": message + "（" + fullName + ":" + AuthUI.email + "）",
+							"username": "残業報告の登録申請",
+							"icon_emoji": ":raising_hand:"
+					};
+					$.ajax({
+						type : "post",
+						url : "https://hooks.slack.com/services/" + slackWebhookURL,
+						data: {
+							"payload": JSON.stringify(JSONData)
+						},
+						scriptCharset: "utf-8",
+					})
+					.then(
+							// 正常時の処理
+							function(data) {
+								alert("常駐先を登録しておきますので、明日またお越しください");
+							},
+							// 異常時の処理
+							function() {
+								alert("何かしらの問題により送信に失敗しました");
+							}
+					);
+				}
+			}
+		});
 		resolve();
 	});
 };
