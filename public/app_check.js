@@ -13,6 +13,7 @@ var origTable = $("#inputTable").html();
 
 $(function(){
 	Promise.resolve()
+	.then((result) => appInit())
 	.then((result) => firebaseInit())
 	.then((result) => downloadCsv())
 	.then((result) => login())
@@ -20,10 +21,18 @@ $(function(){
 	.catch(function(error) {});
 });
 
+//アプリの初期処理
+var appInit = function() {
+	return new Promise((resolve, reject) => {
+		console.log("アプリの初期処理開始");
+		resolve();
+	});
+};
+
 // Firebaseの初期処理
 var firebaseInit = function() {
 	return new Promise((resolve, reject) => {
-		console.log("app初期処理開始");
+		console.log("firebase初期処理開始");
 		fetch('/__/firebase/init.json').then(function(response) {
 			console.log("init.jsonのfetch完了");
 			resolve();
@@ -122,7 +131,7 @@ var createTable = function(uid) {
 
 			$("#inputTable").append(
 					"<tr class='" + holidayClass + "'>" +
-					"<td>" + formatDate(date, "YYYY/MM/DD") + "(" + dayOfWeekStr + ")</td>" +
+					"<td>" + formatDate(date, "MM/DD") + "(" + dayOfWeekStr + ")</td>" +
 					"<td class='client'>" + workStart + "</td>" +
 					"<td class='client'>" + workEnd + "</td>" +
 					"<td class='home'>" + honshaStart + "</td>" +
@@ -197,7 +206,6 @@ var dispTeam = function() {
 var check = function() {
 	return new Promise((resolve, reject) => {
 		$("#checkName").change(function() {
-			console.log("チームメンバが変わった");
 			// 入力表の作成
 			createTable($(this).val());
 		});

@@ -10,16 +10,25 @@ var AuthUI = {
 
 $(function(){
 	Promise.resolve()
+	.then((result) => appInit())
 	.then((result) => firebaseInit())
 	.then((result) => downloadCsv())
 	.then((result) => login())
 	.catch(function(error) {});
 });
 
+// アプリの初期処理
+var appInit = function() {
+	return new Promise((resolve, reject) => {
+		console.log("アプリの初期処理開始");
+		resolve();
+	});
+};
+
 // Firebaseの初期処理
 var firebaseInit = function() {
 	return new Promise((resolve, reject) => {
-		console.log("app初期処理開始");
+		console.log("firebase初期処理開始");
 		fetch('/__/firebase/init.json').then(function(response) {
 			console.log("init.jsonのfetch完了");
 			resolve();
@@ -139,7 +148,7 @@ var createTable = function() {
 
 			$("#inputTable").append(
 					"<tr class='" + holidayClass + "'>" +
-					"<td>" + formatDate(date, "YYYY/MM/DD") + "(" + dayOfWeekStr + ")</td>" +
+					"<td>" + formatDate(date, "MM/DD") + "(" + dayOfWeekStr + ")</td>" +
 					"<td class='client'><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
 					"<td class='client'><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
 					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
