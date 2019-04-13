@@ -23,3 +23,44 @@
 #inputTable th.home,td.home {
 	background-color: #ffd0ad;
 }
+/* メニュー */
+#menu {
+	background-color: #9b9ca3;
+	width: 100%;
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	z-index: 9999;
+}
+#menu ul {
+	margin: 0 auto;
+	padding: 0;
+}
+#menu li {
+	list-style: none;
+	min-width: 50px;
+	text-align: center;
+	color: #ffffff;
+	float: left;
+	width: 33%;
+}
+#menu li.disabled {
+	background-color: #ffffff;
+}
+#menu li a {
+	text-decoration: none;
+	color: #ffffff;
+	color: #333333;
+}
+#menu li.disabled a {
+	pointer-events: none;
+}
+#menu li img {
+	margin-left: 6px;
+}
+#menu li span.miniText {
+	font-size: 8pt;
+}
+body {
+	margin-bottom: 80px;
+}
