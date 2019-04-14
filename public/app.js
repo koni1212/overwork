@@ -18,27 +18,27 @@ var login = function() {
 				AuthUI.uid = user.uid;
 				AuthUI.userName = user.displayName;
 				AuthUI.email = user.email;
-				firebase.database().ref(AuthUI.uid + "/" + "userName").set(AuthUI.userName);
-				firebase.database().ref(AuthUI.uid + "/" + "email").set(AuthUI.email);
+				firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "userName").set(AuthUI.userName);
+				firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "email").set(AuthUI.email);
 
 				// お名前をFirebaseと接続する
-				firebase.database().ref(AuthUI.uid + "/" + "fullName").once("value")
+				firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "fullName").once("value")
 				.then(function(snapshot) {
 					let name = snapshot.val();
 					$("#name").val(name);
 				});
 				$("#name").on("blur", function() {
-					firebase.database().ref(AuthUI.uid + "/" + "fullName").set($(this).val());
+					firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "fullName").set($(this).val());
 				});
 
 				// 常駐先をFirebaseと接続する
-				firebase.database().ref(AuthUI.uid + "/" + "client").once("value")
+				firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "client").once("value")
 				.then(function(snapshot) {
 					let client = snapshot.val();
 					$("#client").val(client);
 				});
 				$("#client").on("change", function() {
-					firebase.database().ref(AuthUI.uid + "/" + "client").set($(this).val());
+					firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "client").set($(this).val());
 				});
 
 				// 入力表の作成
@@ -90,7 +90,7 @@ var createTable = function() {
 			holidayClass = "saturday";
 		}
 
-		firebase.database().ref(AuthUI.uid + "/" + formatDate(date, "YYYYMM/DD")).once("value")
+		firebase.database().ref("time" + "/" + formatDate(date, "YYYYMM") + "/" + AuthUI.uid + "/" + formatDate(date, "DD")).once("value")
 		.then(function(snapshot) {
 			let workStart = snapshot.child("workStart").val();
 			let workEnd = snapshot.child("workEnd").val();
@@ -104,14 +104,14 @@ var createTable = function() {
 			$("#inputTable").append(
 					"<tr class='" + holidayClass + "'>" +
 					"<td>" + formatDate(date, "MM/DD") + "(" + dayOfWeekStr + ")</td>" +
-					"<td class='client'><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='client'><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
-					"<td class='home'><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "YYYYMM/DD") + "'></td>" +
+					"<td class='client'><input type='tel' name='workStart' value='" + workStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
+					"<td class='client'><input type='tel' name='workEnd' value='" + workEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
+					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
+					"<td class='home'><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
 					"</tr>");
 
 			$("#inputTable input[type='tel']").filter(function(index) {
-				return $(this).data("date") == formatDate(date, "YYYYMM/DD");
+				return $(this).data("date") == formatDate(date, "DD");
 			})
 			.on("blur", function() {
 				// 数値以外を除去する
@@ -124,7 +124,7 @@ var createTable = function() {
 					}
 				}
 				$(this).val(afterVal);
-				firebase.database().ref(AuthUI.uid + "/" + $(this).data("date") + "/" + $(this).attr("name")).set($(this).val());
+				firebase.database().ref("time" + "/" +  formatDate(date, "YYYYMM") + "/" + AuthUI.uid + "/" + formatDate(date, "DD") + "/" + $(this).attr("name")).set($(this).val());
 			});
 		});
 	}
