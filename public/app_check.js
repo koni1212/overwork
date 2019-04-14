@@ -111,7 +111,7 @@ var dispTeam = function() {
 	.then(function(snapshot) {
 		snapshot.forEach(function(childSnapshot) {
 			let client = childSnapshot.child("client").val();
-			if (myClient == client) {
+			if (myClient != null && myClient == client) {
 				$("#checkName").append($("<option>").val(childSnapshot.key).text(childSnapshot.child("fullName").val()));
 			}
 		});
