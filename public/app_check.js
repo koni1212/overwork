@@ -118,7 +118,7 @@ var createTable = function(uid) {
 			holidayClass = "saturday";
 		}
 
-		firebase.database().ref(uid + "/" + formatDate(date, "YYYYMM/DD")).once("value")
+		firebase.database().ref("time" + "/" + formatDate(date, "YYYYMM") + "/" + AuthUI.uid + "/" + formatDate(date, "DD")).once("value")
 		.then(function(snapshot) {
 			let workStart = snapshot.child("workStart").val();
 			let workEnd = snapshot.child("workEnd").val();
@@ -185,12 +185,12 @@ var dispTeam = function() {
 
 	let myClient;
 	// 自分の常駐先を取得
-	firebase.database().ref(AuthUI.uid + "/" + "client").once("value")
+	firebase.database().ref("users" + "/" + AuthUI.uid + "/" + "client").once("value")
 	.then(function(snapshot) {
 		myClient = snapshot.val();
 	});
 
-	firebase.database().ref().once("value")
+	firebase.database().ref("users").once("value")
 	.then(function(snapshot) {
 		snapshot.forEach(function(childSnapshot) {
 			let client = childSnapshot.child("client").val();
