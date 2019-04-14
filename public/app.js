@@ -114,6 +114,16 @@ var createTable = function() {
 				return $(this).data("date") == formatDate(date, "YYYYMM/DD");
 			})
 			.on("blur", function() {
+				// 数値以外を除去する
+				let val = $(this).val();
+				let afterVal = "";
+				for (let j=0; j<val.length; j++) {
+					let oneChar = val.substr(j, 1);
+					if (oneChar >=0 && oneChar <= 9) {
+						afterVal += oneChar;
+					}
+				}
+				$(this).val(afterVal);
 				firebase.database().ref(AuthUI.uid + "/" + $(this).data("date") + "/" + $(this).attr("name")).set($(this).val());
 			});
 		});
