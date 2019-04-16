@@ -73,7 +73,7 @@ var createTable = function(uid) {
 			holidayClass = "saturday";
 		}
 
-		firebase.database().ref("time" + "/" + formatDate(date, "YYYYMM") + "/" + AuthUI.uid + "/" + formatDate(date, "DD")).once("value")
+		firebase.database().ref("time" + "/" + formatDate(date, "YYYYMM") + "/" + uid + "/" + formatDate(date, "DD")).once("value")
 		.then(function(snapshot) {
 			let workStart = snapshot.child("workStart").val();
 			let workEnd = snapshot.child("workEnd").val();
