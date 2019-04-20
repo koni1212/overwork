@@ -69,14 +69,15 @@ var login = function() {
 	});
 };
 
-// 15日分の入力枠を作成する
+// 1か月分の入力枠を作成する
 var createTable = function() {
-	console.log("15日テーブル作成開始");
+	console.log("1か月分テーブル作成開始");
 	let systemDate = new Date();
 	let year = systemDate.getFullYear();
 	let month = systemDate.getMonth()+1;
+	let getsumatsu = formatDate(new Date(year, month, 0), "DD");
 
-	for (let i=0; i<15; i++) {
+	for (let i=0; i<getsumatsu; i++) {
 		let date = new Date(year, month-1, i+1);
 		let dayOfWeek = date.getDay();
 		let dayOfWeekStr = [ "日", "月", "火", "水", "木", "金", "土" ][dayOfWeek];
@@ -109,6 +110,12 @@ var createTable = function() {
 					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
 					"<td class='home'><input type='tel' name='honshaEnd' value='" + honshaEnd + "' maxlength='4' size='4' data-date='" + formatDate(date, "DD") + "'></td>" +
 					"</tr>");
+			if(i+1 == 15) {
+				$("#inputTable").append(
+						"<tr>" +
+						"<td class='center' colspan='5'>ここまでを残業報告</td>" +
+						"</tr>");
+			}
 
 			$("#inputTable input[type='tel']").filter(function(index) {
 				return $(this).data("date") == formatDate(date, "DD");

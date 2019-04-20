@@ -23,6 +23,10 @@
 #inputTable th.home,td.home {
 	background-color: #ffd0ad;
 }
+#inputTable td.center {
+	text-align: center;
+}
+
 /* メニュー */
 #menu {
 	background-color: #f2b8b8;
