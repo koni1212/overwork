@@ -121,7 +121,7 @@ var createTable = function() {
 				return $(this).data("date") == formatDate(date, "DD");
 			})
 			.on("blur", function() {
-				// 数値以外を除去する
+				// 数値以外を除去してゼロパディングする
 				let val = $(this).val();
 				let afterVal = "";
 				for (let j=0; j<val.length; j++) {
@@ -129,6 +129,9 @@ var createTable = function() {
 					if (oneChar >=0 && oneChar <= 9) {
 						afterVal += oneChar;
 					}
+				}
+				if (afterVal.length > 0) {
+					afterVal = ("0000" + afterVal).slice(-4);
 				}
 				$(this).val(afterVal);
 				firebase.database().ref("time" + "/" +  formatDate(date, "YYYYMM") + "/" + AuthUI.uid + "/" + formatDate(date, "DD") + "/" + $(this).attr("name")).set($(this).val());
