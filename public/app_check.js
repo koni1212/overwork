@@ -50,16 +50,17 @@ var login = function() {
 	});
 };
 
-// 15日分の入力枠を作成する
+// 1か月分の入力枠を作成する
 var createTable = function(uid) {
-	console.log("15日テーブル作成開始");
+	console.log("1か月テーブル作成開始");
 	let systemDate = new Date();
 	let year = systemDate.getFullYear();
 	let month = systemDate.getMonth()+1;
+	let getsumatsu = formatDate(new Date(year, month, 0), "DD");
 
 	$("#inputTable").html(origTable);
 
-	for (let i=0; i<15; i++) {
+	for (let i=0; i<getsumatsu; i++) {
 		let date = new Date(year, month-1, i+1);
 		let dayOfWeek = date.getDay();
 		let dayOfWeekStr = [ "日", "月", "火", "水", "木", "金", "土" ][dayOfWeek];
@@ -92,6 +93,12 @@ var createTable = function(uid) {
 					"<td class='home'>" + honshaStart + "</td>" +
 					"<td class='home'>" + honshaEnd + "</td>" +
 					"</tr>");
+			if(i+1 == 15) {
+				$("#inputTable").append(
+						"<tr>" +
+						"<td class='center' colspan='5'>ここまでを残業報告</td>" +
+						"</tr>");
+			}
 		});
 	}
 };
