@@ -113,7 +113,13 @@ var createTable = function() {
 			if(i+1 == 15) {
 				$("#inputTable").append(
 						"<tr>" +
-						"<td class='center' colspan='5'>ここまでを残業報告</td>" +
+						"<td class='center' colspan='5'><input type='button' id='overworkHalf' value='ここまでを残業計算' onclick='calcOverworkHalf();'></td>" +
+						"</tr>");
+			}
+			if(i+1 == getsumatsu) {
+				$("#inputTable").append(
+						"<tr>" +
+						"<td class='center' colspan='5'><input type='button' id='overworkFull' value='ここまでを残業計算' onclick='calcOverworkFull();'></td>" +
 						"</tr>");
 			}
 
