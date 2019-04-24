@@ -88,15 +88,21 @@ var createTable = function(uid) {
 			$("#inputTable").append(
 					"<tr class='" + holidayClass + "'>" +
 					"<td>" + formatDate(date, "MM/DD") + "(" + dayOfWeekStr + ")</td>" +
-					"<td class='client'>" + workStart + "</td>" +
-					"<td class='client'>" + workEnd + "</td>" +
-					"<td class='home'>" + honshaStart + "</td>" +
-					"<td class='home'>" + honshaEnd + "</td>" +
+					"<td class='client'><input type='tel' name='workStart' value='" + workStart + "' size='4' disabled></td>" +
+					"<td class='client'><input type='tel' name='workEnd' value='" + workEnd + "' size='4' disabled></td>" +
+					"<td class='home'><input type='tel' name='honshaStart' value='" + honshaStart + "' size='4' disabled></td>" +
+					"<td class='home'><input type='tel' name='honshaEnd' value='" + honshaEnd + "' size='4' disabled></td>" +
 					"</tr>");
 			if(i+1 == 15) {
 				$("#inputTable").append(
 						"<tr>" +
-						"<td class='center' colspan='5'>ここまでを残業報告</td>" +
+						"<td class='center' colspan='5'><input type='button' id='overworkHalf' value='ここまでを残業計算' onclick='calcOverworkHalf();'></td>" +
+						"</tr>");
+			}
+			if(i+1 == getsumatsu) {
+				$("#inputTable").append(
+						"<tr>" +
+						"<td class='center' colspan='5'><input type='button' id='overworkFull' value='ここまでを残業計算' onclick='calcOverworkFull();'></td>" +
 						"</tr>");
 			}
 		});
