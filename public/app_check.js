@@ -125,7 +125,12 @@ var dispTeam = function() {
 		snapshot.forEach(function(childSnapshot) {
 			let client = childSnapshot.child("client").val();
 			if (myClient != null && myClient == client) {
-				$("#checkName").append($("<option>").val(childSnapshot.key).text(childSnapshot.child("fullName").val()));
+				let checkName;
+				checkName = childSnapshot.child("fullName").val();
+				if (checkName == null || checkName == "") {
+					checkName = childSnapshot.child("userName").val() + "(名無しのため認証元から取得)";
+				}
+				$("#checkName").append($("<option>").val(childSnapshot.key).text(checkName));
 			}
 		});
 		console.log("チームメンバ取得終了");
