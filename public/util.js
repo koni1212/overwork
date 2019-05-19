@@ -130,7 +130,7 @@ var isHoliday = function(date) {
 // 半月分の残業時間を計算
 var calcOverworkHalf = function() {
 	let count = 15;
-	let overworkTime = 0;
+	let overworkTime = [0, 0];
 	$("#inputTable tr").each(function(index, tr) {
 		let kaishi1 = $(tr).find("td.client:eq(0) input").val();
 		let shuryo1 = $(tr).find("td.client:eq(1) input").val();
@@ -142,17 +142,19 @@ var calcOverworkHalf = function() {
 		}
 		if (kaishi1 != undefined) {
 			if (count-- > 0) {
-				overworkTime += calcOverworkDay(kaishi1, shuryo1, kaishi2, shuryo2, off);
+				let result = calcOverworkDay(kaishi1, shuryo1, kaishi2, shuryo2, off);
+				overworkTime[0] += result[0];
+				overworkTime[1] += result[1];
 			}
 		}
 	});
 	// 残業時間を表示
-	alert("15日時点の残業時間は" + overworkTime + "hです。\nこれは昼休憩1hのみ計算した概算値です。");
+	alert("15日時点の残業時間は\n昼休憩のみ算出：" + overworkTime[0] + "hです。\n本社労働時間で算出：" + overworkTime[1] + "hです。");
 };
 
 // 1か月分の残業時間を計算
 var calcOverworkFull = function() {
-	let overworkTime = 0;
+	let overworkTime = [0, 0];
 	$("#inputTable tr").each(function(index, tr) {
 		let kaishi1 = $(tr).find("[name='workStart']").val();
 		let shuryo1 = $(tr).find("[name='workEnd']").val();
@@ -163,37 +165,53 @@ var calcOverworkFull = function() {
 			off = true;
 		}
 		if (kaishi1 != undefined) {
-			overworkTime += calcOverworkDay(kaishi1, shuryo1, kaishi2, shuryo2, off);
+			let result = calcOverworkDay(kaishi1, shuryo1, kaishi2, shuryo2, off);
+			overworkTime[0] += result[0];
+			overworkTime[1] += result[1];
 		}
 	});
 	// 残業時間を表示
-	alert("1か月の残業時間は" + overworkTime + "hです。\nこれは昼休憩1hのみ計算した概算値です。");
+	alert("1か月の残業時間は\n昼休憩のみ算出：" + overworkTime[0] + "hです。\n本社労働時間で算出：" + overworkTime[1] + "hです。");
 };
 
 // 1日分の残業時間を計算
 var calcOverworkDay = function(kaishi1, shuryo1, kaishi2, shuryo2, off) {
+
+	let time1 = 0;
+	let time2 = 0;
+
 	let ms1 = calcMs(kaishi1, shuryo1);
 	let ms2 = calcMs(kaishi2, shuryo2);
 	let ms = ms1 + ms2;
 	let hourMs = 1000 * 60 * 60;
 
-	// 8.5h以上ある場合は、昼休憩の1hを引く
+	// 7.5hより大きい場合は、昼休憩の1hを引く
 	if (ms > 7.5 * hourMs) {
-		ms -= hourMs;
+		time1 = ms - hourMs;
+		time2 = ms - hourMs;
+	}
+
+	// 1730-1800を含む場合は、夕方休憩の0.5hを引く
+	if ((kaishi1 <= 1730 && shuryo1 >= 1800) || (kaishi2 <= 1730 && shuryo2 >= 1800)) {
+		time2 -= 0.5 * hourMs;
 	}
 
 	// 休日のときはそのまま残業時間に、平日のときは7.5hを引く
 	if (!off) {
-		ms -= 7.5 * hourMs;
+		time1 -= 7.5 * hourMs;
+		time2 -= 7.5 * hourMs;
 	}
 
 	// 平日の有給休暇などマイナスとなる場合は残業なしとする
-	if (ms < 0) {
-		ms = 0;
+	if (time1 < 0) {
+		time1 = 0;
+	}
+	if (time2 < 0) {
+		time2 = 0;
 	}
 
-	// 時間表示で返却する
-	return ms/hourMs;
+	// 昼休憩のみと夕方休憩含むを返却する
+	return [time1/hourMs, time2/hourMs];
 };
 
 // 開始時間、終了時間から作業時間のミリ秒を返す
