@@ -51,9 +51,8 @@ var login = function() {
 };
 
 // 1か月分の入力枠を作成する
-var createTable = function(uid) {
+var createTable = function(uid, systemDate) {
 	console.log("1か月テーブル作成開始");
-	let systemDate = new Date();
 	let year = systemDate.getFullYear();
 	let month = systemDate.getMonth()+1;
 	let getsumatsu = formatDate(new Date(year, month, 0), "DD");
@@ -142,7 +141,13 @@ var check = function() {
 	return new Promise((resolve, reject) => {
 		$("#checkName").change(function() {
 			// 入力表の作成
-			createTable($(this).val());
+			createTable($(this).val(), new Date());
+		});
+		$("#prev").click(function() {
+			// 前月分の入力表の作成
+			let systemDate = new Date();
+			systemDate.setMonth(systemDate.getMonth() -1);
+			createTable($("#checkName").val(), systemDate);
 		});
 		resolve();
 	});
