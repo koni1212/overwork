@@ -1,10 +1,9 @@
-$(function(){
-	Promise.resolve()
-	.then((result) => appInit())
-	.then((result) => firebaseInit())
-	.then((result) => downloadCsv())
-	.then((result) => login())
-	.catch(function(error) {});
+$(async () => {
+	await appInit();
+	await firebaseInit();
+	await downloadCsv();
+	await login();
+	main();
 });
 
 // ログイン処理
@@ -144,4 +143,32 @@ var createTable = function() {
 			});
 		});
 	}
+};
+
+// 通常処理
+var main = function() {
+	$("#checkin").click(() => {
+		let systemDate = new Date();
+		let date = formatDate(systemDate, "DD");
+		let time = formatDate(systemDate, "hh") + formatDate(systemDate, "mm");
+
+		$("#inputTable input[type='tel'][name='workStart']").filter(function(index) {
+			if ($(this).data("date") == date) {
+				$(this).val(time);
+				$(this).blur();
+			}
+		});
+	});
+	$("#checkout").click(() => {
+		let systemDate = new Date();
+		let date = formatDate(systemDate, "DD");
+		let time = formatDate(systemDate, "hh") + formatDate(systemDate, "mm");
+
+		$("#inputTable input[type='tel'][name='workEnd']").filter(function(index) {
+			if ($(this).data("date") == date) {
+				$(this).val(time);
+				$(this).blur();
+			}
+		});
+	});
 };
