@@ -42,10 +42,9 @@
 }
 #menu li {
 	list-style: none;
-	min-width: 50px;
 	text-align: center;
 	float: left;
-	width: 33%;
+	width: 20%;
 }
 #menu li.disabled {
 	background-color: #9b9ca3;
