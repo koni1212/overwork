@@ -27,7 +27,7 @@ var appInit = function() {
 			if (fullName == null || fullName.length == 0) {
 				alert("この機能はお名前を入力すると利用できます");
 			} else {
-				let message = window.prompt("新しい常駐先を登録できます\nあなたの所属と常駐先を教えてください\n不具合や要望もこちらから");
+				let message = window.prompt("開発者へ質問できます\n不具合や要望もこちらから");
 				if (message == null || message.length == 0) {
 					alert("キャンセルしました");
 				} else {
@@ -48,7 +48,7 @@ var appInit = function() {
 					.then(
 							// 正常時の処理
 							function(data) {
-								alert("常駐先を登録しておきますので、明日またお越しください");
+								alert("問い合わせを承りました");
 							},
 							// 異常時の処理
 							function() {
