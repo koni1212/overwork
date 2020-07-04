@@ -17,9 +17,9 @@ var appInit = function() {
 		console.log("アプリの初期処理開始");
 
 		// SlackのWebhookURLを取得
-		firebase.database().ref("init/slack").once("value")
+		firebase.database().ref("init/chat").once("value")
 		.then(function(snapshot) {
-			slackWebhookURL = decodeURIComponent(snapshot.val());
+			webhookURL = decodeURIComponent(snapshot.val());
 		});
 
 		$("#apply").click(function() {
@@ -33,17 +33,13 @@ var appInit = function() {
 				} else {
 					// 内容送信
 					var JSONData = {
-							"text": message + "（" + fullName + ":" + AuthUI.email + "）",
-							"username": "残業報告の登録申請",
-							"icon_emoji": ":raising_hand:"
+							'text': "残業報告の登録申請\r\n" + message + "（" + fullName + ":" + AuthUI.email + "）"
 					};
 					$.ajax({
-						type : "post",
-						url : "https://hooks.slack.com/services/" + slackWebhookURL,
-						data: {
-							"payload": JSON.stringify(JSONData)
-						},
-						scriptCharset: "utf-8",
+						type : "POST",
+						url : webhookURL,
+						contentType : "application/json; charset=UTF-8",
+						data: JSON.stringify(JSONData),
 					})
 					.then(
 							// 正常時の処理
